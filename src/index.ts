@@ -4,12 +4,12 @@ import { RoomEvent, ClientEvent } from "matrix-js-sdk";
 import handleMessage from "./messages";
 import handleReaction from "./reactions";
 
-const { homeserver, auth_token } = process.env;
+const { bot_user_id, homeserver, auth_token } = process.env;
 
 const client = sdk.createClient({
-  baseUrl: `https://matrix.${homeserver}`,
+  baseUrl: `https://${homeserver}`,
   accessToken: auth_token,
-  userId: `@studio61000:${homeserver}`,
+  userId: bot_user_id,
 });
 
 const start = async () => {
@@ -31,7 +31,7 @@ const start = async () => {
         return; //don't run commands for old messages
       }
 
-      if (event.event.sender === `@sebheo:${homeserver}`) {
+      if (event.event.sender === bot_user_id) {
         return; //don't reply to yourself
       }
 
