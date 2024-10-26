@@ -7,6 +7,7 @@ You will need:
 - A nocodb instance
 - A matrix space
 - A matrix user operating as the bot
+- A cloudron instance
 
 ## Set-up instructions
 
@@ -16,3 +17,11 @@ You will need:
 4. Run `npm run build`
 5. Run `npm start`
 6. Use the word `directory` in the bot's matrix room to trigger a directory query.
+
+## Cloudron instructions
+
+1. The cloudron instructions are here: https://docs.cloudron.io/packaging/tutorial/#overview
+2. Install cloudron cli using `npm install -g cloudron`
+3. Then follow the docker image creation and cloudron installation instructions
+4. After one round of that, you can use `cloudron build` and `cloudron update` because it remembers the previous repositories and images you've set up
+5. Use `cloudron env set --app seb key1=value1 key2=value2...` to set the env variables for the app

@@ -1,18 +1,19 @@
 import "dotenv/config";
-import * as sdk from "matrix-js-sdk";
+import * as matrixSDK from "matrix-js-sdk";
 import { RoomEvent, ClientEvent } from "matrix-js-sdk";
+import express from "express";
 import handleMessage from "./messages";
 import handleReaction from "./reactions";
 
-const { bot_user_id, homeserver, auth_token } = process.env;
+const { bot_user_id, homeserver, auth_token, nocodb_secret } = process.env;
 
-const client = sdk.createClient({
+const client = matrixSDK.createClient({
   baseUrl: `https://${homeserver}`,
   accessToken: auth_token,
   userId: bot_user_id,
 });
 
-const start = async () => {
+const startMatrixClient = async () => {
   await client.startClient();
 
   client.once(ClientEvent.Sync, async (state, prevState, res) => {
@@ -50,4 +51,22 @@ const start = async () => {
   );
 };
 
-start();
+startMatrixClient();
+
+const app = express();
+
+app.get("/", (request, response) => {
+  console.log("visit to the root location");
+
+  response.send("Hello friends");
+});
+
+app.post("/api", (request, response) => {
+  const { secret } = request.params;
+
+  if (secret === nocodb_secret) {
+    console.log("new form submission");
+  }
+});
+
+app.listen(5000);

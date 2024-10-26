@@ -1,0 +1,9 @@
+{
+  "version": "0.1.0",
+  "healthCheckPath": "/",
+  "httpPort": 5000,
+  "addons": {
+    "localstorage": {}
+  },
+  "manifestVersion": 2
+}
