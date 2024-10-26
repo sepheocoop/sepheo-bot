@@ -4,8 +4,15 @@ import { RoomEvent, ClientEvent } from "matrix-js-sdk";
 import express from "express";
 import handleMessage from "./messages";
 import handleReaction from "./reactions";
+import { sendMessage } from "./matrixClientRequests";
 
-const { bot_user_id, homeserver, auth_token, nocodb_secret } = process.env;
+const {
+  bot_user_id,
+  homeserver,
+  auth_token,
+  nocodb_secret,
+  notification_room_id,
+} = process.env;
 
 const client = matrixSDK.createClient({
   baseUrl: `https://${homeserver}`,
@@ -62,10 +69,18 @@ app.get("/", (request, response) => {
 });
 
 app.post("/api", (request, response) => {
-  const { secret } = request.params;
+  const { secret } = request.query;
 
   if (secret === nocodb_secret) {
-    console.log("new form submission");
+    response.send("correct secret, sending notification to matrix");
+
+    sendMessage(
+      notification_room_id,
+      "Hello friends, a new person has filled in the registration form!",
+      { purpose: "notifying of new form submission" }
+    );
+  } else {
+    response.send("incorrect secret, check the parameter");
   }
 });
 
