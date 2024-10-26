@@ -61,6 +61,7 @@ const startMatrixClient = async () => {
 startMatrixClient();
 
 const app = express();
+app.use(express.json());
 
 app.get("/", (request, response) => {
   console.log("visit to the root location");
@@ -70,13 +71,14 @@ app.get("/", (request, response) => {
 
 app.post("/api", (request, response) => {
   const { secret } = request.query;
+  const { data } = request.body;
 
   if (secret === nocodb_secret) {
     response.send("correct secret, sending notification to matrix");
 
     sendMessage(
       notification_room_id,
-      "Hello friends, a new person has filled in the registration form!",
+      `Hello friends, ${data.rows[0].FirstNames} has filled in the registration form!`,
       { purpose: "notifying of new form submission" }
     );
   } else {

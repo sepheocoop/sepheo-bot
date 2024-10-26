@@ -5,7 +5,8 @@
   "scripts": {
     "build": "npx tsc",
     "dev": "npm run build && npm start",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "cloudron": "cloudron build && cloudron update && cloudron logs --app seb -f"
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +17,7 @@
     "typescript": "^5.6.2"
   },
   "devDependencies": {
+    "@types/express": "^5.0.0",
     "@types/node": "^22.7.4"
   }
 }

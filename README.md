@@ -17,6 +17,8 @@ You will need:
 4. Run `npm run build`
 5. Run `npm start`
 6. Use the word `directory` in the bot's matrix room to trigger a directory query.
+7. Configuring the nocodb webhook: https://docs.nocodb.com/automation/webhook/create-webhook/
+8. When adding the secret parameter to your webhook, make sure the box is ticked for it to be active
 
 ## Cloudron instructions
 
