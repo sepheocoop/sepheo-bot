@@ -5,6 +5,8 @@ import express from "express";
 import handleMessage from "./messages";
 import handleReaction from "./reactions";
 import { sendMessage } from "./matrixClientRequests";
+import { createEspoContact } from "./espocrmRequests";
+import { mapNocoToEspo } from "./utils";
 
 const {
   bot_user_id,
@@ -69,20 +71,30 @@ app.get("/", (request, response) => {
   response.send("Hello friends");
 });
 
-app.post("/api", (request, response) => {
+app.post("/api", async (request, response) => {
   const { secret } = request.query;
   const { data } = request.body;
 
-  if (secret === nocodb_secret) {
-    response.send("correct secret, sending notification to matrix");
+  try { 
+    if (secret === nocodb_secret) {
 
-    sendMessage(
-      notification_room_id,
-      `Hello friends, ${data.rows[0].FirstNames} has filled in the registration form!`,
-      { purpose: "notifying of new form submission" }
-    );
-  } else {
-    response.send("incorrect secret, check the parameter");
+      // if we continue extending this codebase,
+      // perhaps we can make the code a bit more modular
+      const espoContactData = mapNocoToEspo(data.rows[0]);
+      await createEspoContact(espoContactData);
+
+      await sendMessage(
+        notification_room_id,
+        `Hello friends, ${data.rows[0].FirstNames} has filled in the registration form!`,
+        { purpose: "notifying of new form submission" }
+      );
+
+      response.send("correct secret, created espoContact and sent notification to matrix");
+    } else {
+      response.send("incorrect secret, check the parameter");
+    }
+  } catch(error) { 
+    console.error("Error in /api endpoint:", error.message);
   }
 });
 
