@@ -35,7 +35,7 @@ export interface NocoDBContact {
   CvUrl: string | null;
   CV: string | null;
   Provenance: string | null;
-  Connections: string | null;ß
+  Connections: string | null;
   Wants: string | null;
   Offers: string | null;
   Availability: string | null;

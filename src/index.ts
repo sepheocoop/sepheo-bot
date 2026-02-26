@@ -56,7 +56,7 @@ const startMatrixClient = async () => {
       if (event.getType() === "m.room.message") handleMessage(event);
 
       if (event.getType() === "m.reaction") handleReaction(event);
-    }
+    },
   );
 };
 
@@ -75,9 +75,8 @@ app.post("/api", async (request, response) => {
   const { secret } = request.query;
   const { data } = request.body;
 
-  try { 
+  try {
     if (secret === nocodb_secret) {
-
       // if we continue extending this codebase,
       // perhaps we can make the code a bit more modular
       const espoContactData = mapNocoToEspo(data.rows[0]);
@@ -86,14 +85,16 @@ app.post("/api", async (request, response) => {
       await sendMessage(
         notification_room_id,
         `Hello friends, ${data.rows[0].FirstNames} has filled in the registration form!`,
-        { purpose: "notifying of new form submission" }
+        { purpose: "notifying of new form submission" },
       );
 
-      response.send("correct secret, created espoContact and sent notification to matrix");
+      response.send(
+        "correct secret, created espoContact and sent notification to matrix",
+      );
     } else {
       response.send("incorrect secret, check the parameter");
     }
-  } catch(error) { 
+  } catch (error) {
     console.error("Error in /api endpoint:", error.message);
   }
 });
