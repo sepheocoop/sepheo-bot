@@ -4,14 +4,14 @@ import { RoomEvent, ClientEvent } from "matrix-js-sdk";
 import express from "express";
 import handleMessage from "./messages";
 import handleReaction from "./reactions";
-import { sendMessage } from "./matrixClientRequests";
+import { normalisePayload } from "./contactEvents";
+import { notifyOfContactEvent } from "./notifications";
 
 const {
   bot_user_id,
   homeserver,
   auth_token,
   nocodb_secret,
-  notification_room_id,
 } = process.env;
 
 const client = matrixSDK.createClient({
@@ -69,21 +69,33 @@ app.get("/", (request, response) => {
   response.send("Hello friends");
 });
 
-app.post("/api", (request, response) => {
+// Espo retries non-2xx responses 4 times, 10 minutes apart, so the status code
+// decides whether a failed notification is lost or redelivered. The sends are
+// awaited before responding — express 4 does not catch rejected promises from
+// an async handler, so the try/catch here is what keeps the process alive.
+app.post("/api", async (request, response) => {
   const { secret } = request.query;
-  const { data } = request.body;
 
-  if (secret === nocodb_secret) {
-    response.send("correct secret, sending notification to matrix");
-
-    sendMessage(
-      notification_room_id,
-      `Hello friends, ${data.rows[0].FirstNames} has filled in the registration form!`,
-      { purpose: "notifying of new form submission" }
-    );
-  } else {
-    response.send("incorrect secret, check the parameter");
+  if (secret !== nocodb_secret) {
+    console.log("rejected webhook: incorrect secret");
+    response.status(401).send("incorrect secret, check the parameter");
+    return;
   }
+
+  const contactEvents = normalisePayload(request.body);
+
+  try {
+    for (const contactEvent of contactEvents) {
+      await notifyOfContactEvent(contactEvent);
+    }
+  } catch (error) {
+    console.error("failed to send notification to matrix:", error);
+    response.status(500).send("failed to send notification to matrix");
+    return;
+  }
+
+  console.log(`sent ${contactEvents.length} notification(s)`);
+  response.status(200).send(`sent ${contactEvents.length} notification(s)`);
 });
 
 app.listen(5000);
