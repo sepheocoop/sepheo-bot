@@ -3,6 +3,7 @@
 set -eu
 
 # ensure that data directory is owned by 'cloudron' user
+mkdir -p /app/data
 chown -R cloudron:cloudron /app/data
 
 echo "Starting TypeScript app"
