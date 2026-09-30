@@ -3,10 +3,11 @@
   "compilerOptions": {
     "target": "ES2016",
     "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "module": "CommonJS",
-    "moduleResolution": "Node",
     "lib": ["es2021"]
   }
 }
