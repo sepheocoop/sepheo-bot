@@ -23,13 +23,13 @@ export const directory = async (event = null) => {
 
   sendMessage(event.event.room_id, message, {
     purpose: "answer to directory query",
-  });
+  }).catch((error) => console.error("failed to send directory reply:", error));
 };
 
 const thankYou = (event) => {
   sendMessage(event.event.room_id, "thanks for the message, friend", {
     purpose: "simple reply",
-  });
+  }).catch((error) => console.error("failed to send reply:", error));
 };
 
 const handleMessage = (event) => {
