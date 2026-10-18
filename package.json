@@ -5,19 +5,23 @@
   "scripts": {
     "build": "rm -rf dist && npx tsc",
     "dev": "npm run build && npm start",
+    "docker-build": "docker build .",
     "start": "node dist/index.js",
-    "cloudron": "cloudron build && cloudron update && cloudron logs --app seb -f"
+    "cloudron-install": "cloudron install --location seb.sepheo.co",
+    "cloudron-update": "cloudron update --app seb",
+    "cloudron-logs": "cloudron logs --app seb -f"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
-    "matrix-js-sdk": "^30.3.0",
+    "matrix-js-sdk": "^44.0.0",
     "typescript": "^5.6.2"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
-    "@types/node": "^22.7.4"
+    "@types/node": "^22.7.4",
+    "cloudron": "^9.0.3"
   }
 }
