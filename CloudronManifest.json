@@ -1,9 +1,14 @@
 {
-  "version": "0.1.0",
+  "id": "co.sepheo.sebheo",
+  "title": "Sebheo",
+  "version": "0.1.1",
   "healthCheckPath": "/",
   "httpPort": 5000,
   "addons": {
-    "localstorage": {}
+    "localstorage": {},
+    "sendmail": {
+      "supportsDisplayName": true
+    }
   },
   "tcpPorts": {
     "SSH_PORT": {
@@ -13,5 +18,6 @@
       "enabledByDefault": true
     }
   },
+  "documentationUrl": "https://github.com/sepheocoop/sepheo-bot/blob/main/README.md",
   "manifestVersion": 2
 }
