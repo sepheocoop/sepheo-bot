@@ -5,5 +5,13 @@
   "addons": {
     "localstorage": {}
   },
+  "tcpPorts": {
+    "SSH_PORT": {
+      "title": "SSH Port",
+      "description": "SSH Port for remote access",
+      "defaultValue": 2222,
+      "enabledByDefault": true
+    }
+  },
   "manifestVersion": 2
 }
