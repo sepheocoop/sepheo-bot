@@ -2,26 +2,38 @@
   "name": "sepheo-bot",
   "version": "0.1.1",
   "description": "chatbot for sepheo matrix chat",
+  "type": "module",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "rm -rf dist && npx tsc",
+    "build": "vite build",
     "dev": "npm run build && npm start",
     "docker-build": "docker build .",
     "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest --watch",
+    "prettier:check": "prettier -c .",
+    "prettier:write": "prettier -w .",
     "cloudron-install": "cloudron install --location seb.sepheo.co",
     "cloudron-update": "cloudron update --app seb",
     "cloudron-logs": "cloudron logs --app seb -f"
+  },
+  "engines": {
+    "node": ">=24"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
-    "matrix-js-sdk": "^44.0.0",
-    "typescript": "^5.6.2"
+    "matrix-js-sdk": "^44.0.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
     "@types/node": "^22.7.4",
-    "cloudron": "^9.0.3"
+    "cloudron": "^9.0.3",
+    "prettier": "^3.0.0",
+    "typescript": "^5.6.2",
+    "vite-node": "^5.2.0",
+    "vitest": "^5.0.5"
   }
 }
