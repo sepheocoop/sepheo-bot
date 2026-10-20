@@ -1,6 +1,6 @@
 {
-  "name": "sepheo-helper-bot",
-  "version": "1.0.0",
+  "name": "sepheo-bot",
+  "version": "0.1.1",
   "description": "chatbot for sepheo matrix chat",
   "scripts": {
     "build": "rm -rf dist && npx tsc",
