@@ -2,10 +2,10 @@ import "dotenv/config";
 import * as matrixSDK from "matrix-js-sdk";
 import { RoomEvent, ClientEvent } from "matrix-js-sdk";
 import express from "express";
-import handleMessage from "./messages";
-import handleReaction from "./reactions";
-import { normalisePayload } from "./contactEvents";
-import { notifyOfContactEvent } from "./notifications";
+import handleMessage from "./messages.js";
+import handleReaction from "./reactions.js";
+import { normalisePayload } from "./contactEvents.js";
+import { notifyOfContactEvent } from "./notifications.js";
 
 const { bot_user_id, homeserver, auth_token, nocodb_secret } = process.env;
 

@@ -1,6 +1,6 @@
-import { directoryResponse } from "./types";
-import { sendMessage } from "./matrixClientRequests";
-import { getDirectory } from "./nocodbRequests";
+import { directoryResponse } from "./types.js";
+import { sendMessage } from "./matrixClientRequests.js";
+import { getDirectory } from "./nocodbRequests.js";
 
 export const directory = async (event = null) => {
   const response = await getDirectory();

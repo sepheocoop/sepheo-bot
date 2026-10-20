@@ -1,5 +1,5 @@
-import { sendMessage } from "./matrixClientRequests";
-import type { ContactEvent } from "./contactEvents";
+import { sendMessage } from "./matrixClientRequests.js";
+import type { ContactEvent } from "./contactEvents.js";
 
 const { notification_room_id } = process.env;
 
