@@ -16,6 +16,11 @@ const notificationFor = ({ firstName, event }: ContactEvent) => {
 };
 
 export const notifyOfContactEvent = async (contactEvent: ContactEvent) => {
+  if (notification_room_id === undefined) {
+    console.error(`No environment variable: notification_room_id`);
+    return;
+  }
+
   const { message, purpose } = notificationFor(contactEvent);
   await sendMessage(notification_room_id, message, { purpose });
 };

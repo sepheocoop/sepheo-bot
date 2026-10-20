@@ -18,7 +18,7 @@ const client = matrixSDK.createClient({
 const startMatrixClient = async () => {
   await client.startClient();
 
-  client.once(ClientEvent.Sync, async (state, prevState, res) => {
+  client.once(ClientEvent.Sync, async (state, _prevState, res) => {
     // state will be 'PREPARED' when the client is ready to use
     console.log(state);
   });
@@ -27,10 +27,10 @@ const startMatrixClient = async () => {
 
   client.on(
     RoomEvent.Timeline,
-    async function (event, room, toStartOfTimeline) {
+    async function (event, _room, _toStartOfTimeline) {
       const eventTime = event.event.origin_server_ts;
 
-      if (scriptStart > eventTime) {
+      if (eventTime !== undefined && scriptStart > eventTime) {
         return; //don't run commands for old messages
       }
 
@@ -58,7 +58,7 @@ startMatrixClient();
 const app = express();
 app.use(express.json());
 
-app.get("/", (request, response) => {
+app.get("/", (_request, response) => {
   console.log("visit to the root location");
 
   response.send("Hello friends");
