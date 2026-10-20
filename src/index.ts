@@ -7,12 +7,7 @@ import handleReaction from "./reactions";
 import { normalisePayload } from "./contactEvents";
 import { notifyOfContactEvent } from "./notifications";
 
-const {
-  bot_user_id,
-  homeserver,
-  auth_token,
-  nocodb_secret,
-} = process.env;
+const { bot_user_id, homeserver, auth_token, nocodb_secret } = process.env;
 
 const client = matrixSDK.createClient({
   baseUrl: `https://${homeserver}`,
@@ -54,7 +49,7 @@ const startMatrixClient = async () => {
       if (event.getType() === "m.room.message") handleMessage(event);
 
       if (event.getType() === "m.reaction") handleReaction(event);
-    }
+    },
   );
 };
 

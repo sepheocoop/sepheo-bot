@@ -10,7 +10,7 @@ export const directory = async (event = null) => {
 
   const looking = list.filter((member) => member.Availability === "Looking");
   const notLooking = list.filter(
-    (member) => member.Availability === "Not looking"
+    (member) => member.Availability === "Not looking",
   );
 
   const message = `Thanks for asking, friend. The SEPHEO directory has ${
