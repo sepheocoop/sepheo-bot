@@ -1,8 +1,9 @@
-import { directoryResponse } from "./types";
-import { sendMessage } from "./matrixClientRequests";
-import { getDirectory } from "./nocodbRequests";
+import { directoryResponse } from "./types.js";
+import { sendMessage } from "./matrixClientRequests.js";
+import { getDirectory } from "./nocodbRequests.js";
+import { MatrixEvent } from "matrix-js-sdk";
 
-export const directory = async (event = null) => {
+export const directory = async (event: MatrixEvent | null = null) => {
   const response = await getDirectory();
   const result = (await response.json()) as directoryResponse;
 
@@ -10,7 +11,7 @@ export const directory = async (event = null) => {
 
   const looking = list.filter((member) => member.Availability === "Looking");
   const notLooking = list.filter(
-    (member) => member.Availability === "Not looking"
+    (member) => member.Availability === "Not looking",
   );
 
   const message = `Thanks for asking, friend. The SEPHEO directory has ${
@@ -21,19 +22,29 @@ export const directory = async (event = null) => {
     .map((member) => `\n- ${member.FirstNames} ${member.Surname}`)
     .join("")}`;
 
-  sendMessage(event.event.room_id, message, {
-    purpose: "answer to directory query",
-  }).catch((error) => console.error("failed to send directory reply:", error));
+  if (!event || event.event.room_id == undefined) return;
+
+  try {
+    await sendMessage(event.event.room_id, message, {
+      purpose: "answer to directory query",
+    });
+  } catch (error) {
+    console.error("failed to send directory reply:", error);
+  }
 };
 
-const thankYou = (event) => {
+const thankYou = (event: MatrixEvent) => {
+  if (event.event.room_id == undefined) return;
+
   sendMessage(event.event.room_id, "thanks for the message, friend", {
     purpose: "simple reply",
   }).catch((error) => console.error("failed to send reply:", error));
 };
 
-const handleMessage = (event) => {
+const handleMessage = (event: MatrixEvent) => {
   console.log("reaction to message", event);
+
+  if (event.event.content?.body == undefined) return;
 
   const message = event.event.content.body;
 

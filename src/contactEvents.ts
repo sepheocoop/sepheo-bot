@@ -7,7 +7,7 @@ type EspoEntry = {
   source?: string;
   event?: "create" | "update";
   contact?: { firstName?: string };
-}
+};
 
 export const normalisePayload = (body: unknown): ContactEvent[] => {
   // Espo posts a bare array, batching everything its cron drained into one request.

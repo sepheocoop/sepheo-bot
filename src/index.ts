@@ -2,17 +2,12 @@ import "dotenv/config";
 import * as matrixSDK from "matrix-js-sdk";
 import { RoomEvent, ClientEvent } from "matrix-js-sdk";
 import express from "express";
-import handleMessage from "./messages";
-import handleReaction from "./reactions";
-import { normalisePayload } from "./contactEvents";
-import { notifyOfContactEvent } from "./notifications";
+import handleMessage from "./messages.js";
+import handleReaction from "./reactions.js";
+import { normalisePayload } from "./contactEvents.js";
+import { notifyOfContactEvent } from "./notifications.js";
 
-const {
-  bot_user_id,
-  homeserver,
-  auth_token,
-  nocodb_secret,
-} = process.env;
+const { bot_user_id, homeserver, auth_token, nocodb_secret } = process.env;
 
 const client = matrixSDK.createClient({
   baseUrl: `https://${homeserver}`,
@@ -23,7 +18,7 @@ const client = matrixSDK.createClient({
 const startMatrixClient = async () => {
   await client.startClient();
 
-  client.once(ClientEvent.Sync, async (state, prevState, res) => {
+  client.once(ClientEvent.Sync, async (state, _prevState, res) => {
     // state will be 'PREPARED' when the client is ready to use
     console.log(state);
   });
@@ -32,10 +27,10 @@ const startMatrixClient = async () => {
 
   client.on(
     RoomEvent.Timeline,
-    async function (event, room, toStartOfTimeline) {
+    async function (event, _room, _toStartOfTimeline) {
       const eventTime = event.event.origin_server_ts;
 
-      if (scriptStart > eventTime) {
+      if (eventTime !== undefined && scriptStart > eventTime) {
         return; //don't run commands for old messages
       }
 
@@ -54,7 +49,7 @@ const startMatrixClient = async () => {
       if (event.getType() === "m.room.message") handleMessage(event);
 
       if (event.getType() === "m.reaction") handleReaction(event);
-    }
+    },
   );
 };
 
@@ -63,7 +58,7 @@ startMatrixClient();
 const app = express();
 app.use(express.json());
 
-app.get("/", (request, response) => {
+app.get("/", (_request, response) => {
   console.log("visit to the root location");
 
   response.send("Hello friends");
