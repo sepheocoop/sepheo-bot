@@ -23,7 +23,10 @@ You will need:
 ## Cloudron instructions
 
 1. The cloudron instructions are here: https://docs.cloudron.io/packaging/tutorial/#overview
-2. Install cloudron cli using `npm install -g cloudron`
-3. Then follow the docker image creation and cloudron installation instructions
-4. After one round of that, you can use `cloudron build` and `cloudron update` because it remembers the previous repositories and images you've set up
+2. Then follow the docker image creation and cloudron installation instructions
+4. After one round of that, you can use `npm run cloudron-install` and `npm run cloudron-update` because it remembers the previous repositories and images you've set up
 5. Use `cloudron env set --app seb key1=value1 key2=value2...` to set the env variables for the app
+
+See `.env.example` for the list of environment variables to set (although obviously no values are included). The up-to-date values of these should be stored in the organisational password manager. Ask an admin for details.
+
+You can use `npm run cloudron-log` to list the logs from the Cloudron server, and therefore to diagnose errors if they occur during the install.
